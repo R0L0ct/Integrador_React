@@ -32,7 +32,7 @@ export const LinksContainerStyled = styled.div`
     bottom: 0px;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: black;
     flex-direction: column;
     align-items: center;
