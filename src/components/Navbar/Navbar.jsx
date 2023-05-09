@@ -27,6 +27,8 @@ export const Navbar = () => {
   const [isLocked, setIsLocked] = useState(bodyStyle.overflow === "hidden");
   const [isHiddenMenu, setHiddenMenu] = useState(true);
 
+  const isMobileRes = useMediaQuery({ maxWidth: 500 });
+
   const isMediumScreen = useMediaQuery({ maxWidth: 800 });
   const changeLogo = useMediaQuery({ maxWidth: 1170 });
 
@@ -106,7 +108,9 @@ export const Navbar = () => {
             <FaShoppingCart
               onClick={() => {
                 dispatch(cartActions.toggleCart());
-                toggleOverflow();
+                if (!isMobileRes) {
+                  toggleOverflow();
+                }
               }}
             />
           </CartIconContainerStyled>

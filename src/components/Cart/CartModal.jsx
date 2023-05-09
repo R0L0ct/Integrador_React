@@ -17,10 +17,12 @@ import * as cartActions from "../../redux/cart/cart.actions";
 import { CartProducts } from "../CartProductos/CartProducts";
 import { BsTrash } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 export const CartModal = ({ toggleOverflow }) => {
   const toggleHidden = useSelector((state) => state.cart.hidden);
   const { cartItems, shippingCost } = useSelector((state) => state.cart);
+  const isMobileRes = useMediaQuery({ maxWidth: 500 });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggleDisabled = () => {
@@ -42,7 +44,9 @@ export const CartModal = ({ toggleOverflow }) => {
             <CartCloseButton
               onClick={() => {
                 dispatch(cartActions.toggleCart());
-                toggleOverflow();
+                if (!isMobileRes) {
+                  toggleOverflow();
+                }
               }}
             >
               X
@@ -79,7 +83,9 @@ export const CartModal = ({ toggleOverflow }) => {
               type="submit"
               onClick={() => {
                 navigate("checkout");
-                toggleOverflow();
+                if (!isMobileRes) {
+                  toggleOverflow();
+                }
               }}
             >
               Confirmar
