@@ -17,6 +17,7 @@ export const CartContainerStyled = styled.div`
   @media (max-width: 800px) {
     width: 100vw;
     height: 100vh;
+    max-height: 100vh;
     padding: 0px;
   }
 `;
