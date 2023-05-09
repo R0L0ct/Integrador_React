@@ -12,6 +12,10 @@ export const ContactanosContainerStyled = styled.div`
   @media (max-width: 564px) {
     flex-direction: row;
   }
+  @media (max-width: 374px) {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
 `;
 
 export const ContactoBoxStyled = styled.div`
@@ -35,7 +39,9 @@ export const ContactoBoxStyled = styled.div`
     border-right: none;
   }
   @media (max-width: 374px) {
-    padding: 20px;
+    padding: 10px;
+    overflow: auto;
+    height: 100vh;
   }
 `;
 

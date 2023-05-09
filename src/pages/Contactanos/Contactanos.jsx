@@ -20,8 +20,10 @@ export const Contactanos = () => {
         <FormikContactContainer
           initialValues={contactInitialValues}
           validationSchema={contactValidationSchema}
-          onSubmit={() => {
+          onSubmit={(values, onSubmitProps) => {
             alert("Consulta enviada exitosamente!");
+            console.log("Form data", values);
+            onSubmitProps.resetForm();
           }}
         >
           <FormikContactForm>
