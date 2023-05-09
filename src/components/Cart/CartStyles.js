@@ -12,7 +12,8 @@ export const CartContainerStyled = styled.div`
   right: 0;
   padding: 20px;
   z-index: 999;
-  overflow-y: scroll;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
   @media (max-width: 800px) {
     width: 100vw;
     height: 100vh;
