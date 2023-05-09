@@ -14,3 +14,11 @@ export const checkoutValidationSchema = Yup.object({
   region: Yup.string().required("Campo requerido"),
   phone: Yup.string().required("Campo requerido"),
 });
+
+export const contactValidationSchema = Yup.object({
+  name: Yup.string().required("Campo requerido"),
+  email: Yup.string()
+    .matches(regEmail, "Mail no valido")
+    .required("Campo requerido"),
+  message: Yup.string().required("Campo requerido"),
+});

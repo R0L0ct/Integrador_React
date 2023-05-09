@@ -12,9 +12,11 @@ export const NavbarContainerStyled = styled.div`
 `;
 
 export const ImgContainerStyled = styled.div`
-  border: 1px solid white;
+  border: 2px solid white;
+  border-radius: 50%;
   @media (max-width: 1170px) {
     border: none;
+    border-radius: 0px;
   }
   @media (max-width: 366px) {
     display: none;

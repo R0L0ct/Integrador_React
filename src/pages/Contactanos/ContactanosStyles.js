@@ -1,3 +1,4 @@
+import { Form, Formik } from "formik";
 import styled from "styled-components";
 
 export const ContactanosContainerStyled = styled.div`
@@ -6,6 +7,8 @@ export const ContactanosContainerStyled = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
   @media (max-width: 564px) {
     flex-direction: row;
   }
@@ -91,4 +94,13 @@ export const Button = styled.button`
     width: 100px;
     font-size: 12px;
   }
+`;
+
+export const FormikContactContainer = styled(Formik)``;
+
+export const FormikContactForm = styled(Form)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;

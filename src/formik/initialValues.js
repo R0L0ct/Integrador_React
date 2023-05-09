@@ -8,3 +8,9 @@ export const checkoutInitialValues = {
   adress: "",
   phone: "",
 };
+
+export const contactInitialValues = {
+  name: "",
+  email: "",
+  message: "",
+};

@@ -5,6 +5,7 @@ export const HeroContainerStyled = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
+  padding-bottom: 20px;
   @media (max-width: 1170px) {
     justify-content: center;
   }

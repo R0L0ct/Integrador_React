@@ -69,7 +69,7 @@ export const Navbar = () => {
             {changeLogo ? (
               <img src="images/logoSkull.png" alt="logo-hero" width={100} />
             ) : (
-              <img src="images/logoMano.png" alt="logo-hand" width={100} />
+              <img src="images/logoHC.png" alt="logo-hand" width={100} />
             )}
           </ImgContainerStyled>
         </Link>
