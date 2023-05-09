@@ -28,7 +28,7 @@ export const LinksContainerStyled = styled.div`
   display: flex;
   gap: 30px;
   @media (max-width: 800px) {
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     left: 0;
     width: 100vw;
