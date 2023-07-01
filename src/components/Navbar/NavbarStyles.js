@@ -6,7 +6,7 @@ export const NavbarContainerStyled = styled.div`
   background-color: black;
   color: white;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 20px 0px;
 `;
@@ -126,4 +126,31 @@ export const MenuStyled = styled.div`
   background-color: white;
   width: 100vw;
   height: 100vh;
+`;
+
+export const RegisterStyled = styled.p`
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: ${({ isHiddenMenu }) => (!isHiddenMenu ? "none" : "flex")};
+  @media (max-width: 500px) {
+    display: none;
+  }
+  color: white;
+  :hover {
+    color: orange;
+  }
+`;
+
+export const LoggedStyled = styled.p`
+  display: ${({ isHiddenMenu }) => (!isHiddenMenu ? "none" : "flex")};
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;

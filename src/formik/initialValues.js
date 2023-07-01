@@ -14,3 +14,14 @@ export const contactInitialValues = {
   email: "",
   message: "",
 };
+
+export const registerInitialValues = {
+  name: "",
+  email: "",
+  password: "",
+};
+
+export const loginInitialValues = {
+  email: "",
+  password: "",
+};

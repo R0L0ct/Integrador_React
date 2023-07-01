@@ -10,8 +10,10 @@ import {
   CartIconCounter,
   CartAndMenuContainer,
   MenuContainer,
+  RegisterStyled,
+  LoggedStyled,
 } from "./NavbarStyles";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
@@ -26,11 +28,27 @@ export const Navbar = () => {
   const bodyStyle = document.body.style;
   const [isLocked, setIsLocked] = useState(bodyStyle.overflow === "hidden");
   const [isHiddenMenu, setHiddenMenu] = useState(true);
+  const [isRegisterData, setRegisterData] = useState("");
+  const [isLogged, setLogged] = useState("");
 
   const isMobileRes = useMediaQuery({ maxWidth: 500 });
 
   const isMediumScreen = useMediaQuery({ maxWidth: 800 });
   const changeLogo = useMediaQuery({ maxWidth: 1170 });
+
+  useEffect(() => {
+    const datosGuardados = localStorage.getItem("datos");
+    if (datosGuardados) {
+      setRegisterData(JSON.parse(datosGuardados));
+    }
+  }, []);
+
+  useEffect(() => {
+    const datosGuardados = localStorage.getItem("datos");
+    if (datosGuardados) {
+      setLogged(JSON.parse(datosGuardados));
+    }
+  }, []);
 
   useEffect(() => {
     bodyStyle.overflow = isLocked ? "hidden" : "auto";
@@ -114,6 +132,32 @@ export const Navbar = () => {
               }}
             />
           </CartIconContainerStyled>
+          {isLogged.logged ? (
+            <LoggedStyled isHiddenMenu={isHiddenMenu}>
+              {`Hi,${isLogged.name}`}
+              <FaSignOutAlt
+                style={{ color: "red" }}
+                onClick={() => {
+                  localStorage.setItem(
+                    "datos",
+                    JSON.stringify({ ...isLogged, logged: false })
+                  );
+
+                  window.location.reload();
+                }}
+              />
+            </LoggedStyled>
+          ) : isRegisterData ? (
+            <Link to="login">
+              <RegisterStyled isHiddenMenu={isHiddenMenu}>Login</RegisterStyled>
+            </Link>
+          ) : (
+            <Link to="register">
+              <RegisterStyled isHiddenMenu={isHiddenMenu}>
+                Register
+              </RegisterStyled>
+            </Link>
+          )}
           {isMediumScreen && (
             <MenuContainer
               onClick={() => {
