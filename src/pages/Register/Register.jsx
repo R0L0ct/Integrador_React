@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { registerInitialValues } from "../../formik/initialValues";
 import { registerValidationSchema } from "../../formik/validationSchema";
 import { Input } from "../../components/UI/input/Input";
+import { register } from "../../api/data";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -22,8 +23,13 @@ export const Register = () => {
         <FormikContainer
           initialValues={registerInitialValues}
           validationSchema={registerValidationSchema}
-          onSubmit={(values) => {
-            localStorage.setItem("datos", JSON.stringify(values));
+          onSubmit={async (values) => {
+            // localStorage.setItem("datos", JSON.stringify(values));
+            await register({
+              name: values.name,
+              email: values.email,
+              password: values.password,
+            });
             navigate("/");
             window.location.reload();
           }}

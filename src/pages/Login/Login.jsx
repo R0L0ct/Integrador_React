@@ -12,6 +12,7 @@ import {
   LoginFormContainer,
   SubmitStyled,
 } from "./LoginStyles";
+import { login } from "../../api/data";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -24,22 +25,22 @@ export const Login = () => {
     }
   }, []);
 
-  function compareRegisterData(values) {
-    if (
-      values.email === registerData.email &&
-      values.password === registerData.password
-    ) {
-      //   window.location.reload();
-      localStorage.setItem(
-        "datos",
-        JSON.stringify({ ...registerData, logged: true })
-      );
-      navigate("/");
-      window.location.reload();
-    } else {
-      alert("Usuario no encontrado");
-    }
-  }
+  // function compareRegisterData(values) {
+  //   if (
+  //     values.email === registerData.email &&
+  //     values.password === registerData.password
+  //   ) {
+  //     //   window.location.reload();
+  //     localStorage.setItem(
+  //       "datos",
+  //       JSON.stringify({ ...registerData, logged: true })
+  //     );
+  //     navigate("/");
+  //     window.location.reload();
+  //   } else {
+  //     alert("Usuario no encontrado");
+  //   }
+  // }
 
   return (
     <LoginContainerStyled>
@@ -48,8 +49,12 @@ export const Login = () => {
         <FormikContainer
           initialValues={loginInitialValues}
           validationSchema={loginValidationSchema}
-          onSubmit={(values) => {
-            compareRegisterData(values);
+          onSubmit={async (values) => {
+            login({
+              email: values.email,
+              password: values.password,
+            });
+            // compareRegisterData(values);
           }}
         >
           <FormikForm>

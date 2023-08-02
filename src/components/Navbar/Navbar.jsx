@@ -147,16 +147,19 @@ export const Navbar = () => {
                 }}
               />
             </LoggedStyled>
-          ) : isRegisterData ? (
-            <Link to="login">
-              <RegisterStyled isHiddenMenu={isHiddenMenu}>Login</RegisterStyled>
-            </Link>
           ) : (
-            <Link to="register">
-              <RegisterStyled isHiddenMenu={isHiddenMenu}>
-                Register
-              </RegisterStyled>
-            </Link>
+            <div>
+              <Link to="login">
+                <RegisterStyled isHiddenMenu={isHiddenMenu}>
+                  Login
+                </RegisterStyled>
+              </Link>
+              <Link to="register">
+                <RegisterStyled isHiddenMenu={isHiddenMenu}>
+                  Register
+                </RegisterStyled>
+              </Link>
+            </div>
           )}
           {isMediumScreen && (
             <MenuContainer
