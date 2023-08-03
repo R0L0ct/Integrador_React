@@ -20,6 +20,7 @@ import * as cartActions from "../../redux/cart/cart.actions";
 import { CartModal } from "../Cart/CartModal";
 import { FaBars } from "react-icons/fa";
 import { useMediaQuery } from "react-responsive";
+import { getUserBySessionToken, logout } from "../../api/data";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -44,10 +45,19 @@ export const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const datosGuardados = localStorage.getItem("datos");
-    if (datosGuardados) {
-      setLogged(JSON.parse(datosGuardados));
-    }
+    const isAuth = async () => {
+      const userAuth = await getUserBySessionToken();
+      if (userAuth) {
+        setLogged(userAuth.data);
+      } else {
+        setLogged("");
+      }
+    };
+    isAuth();
+    // const datosGuardados = localStorage.getItem("datos");
+    // if (datosGuardados) {
+    //   setLogged(JSON.parse(datosGuardados));
+    // }
   }, []);
 
   useEffect(() => {
@@ -132,18 +142,13 @@ export const Navbar = () => {
               }}
             />
           </CartIconContainerStyled>
-          {isLogged.logged ? (
+          {isLogged ? (
             <LoggedStyled isHiddenMenu={isHiddenMenu}>
-              {`Hi,${isLogged.name}`}
+              {`Hi, ${isLogged.name}`}
               <FaSignOutAlt
                 style={{ color: "red" }}
-                onClick={() => {
-                  localStorage.setItem(
-                    "datos",
-                    JSON.stringify({ ...isLogged, logged: false })
-                  );
-
-                  window.location.reload();
+                onClick={async () => {
+                  await logout();
                 }}
               />
             </LoggedStyled>

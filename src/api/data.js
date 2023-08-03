@@ -24,4 +24,22 @@ const login = async (data) => {
   }
 };
 
-export { register, login };
+const logout = async () => {
+  try {
+    const response = await axiosInstance.post(`${API}/auth/logout`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getUserBySessionToken = async () => {
+  try {
+    const response = await axiosInstance.get(`${API}/user/isauth`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { register, login, getUserBySessionToken, logout };

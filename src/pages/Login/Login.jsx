@@ -50,10 +50,11 @@ export const Login = () => {
           initialValues={loginInitialValues}
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
-            login({
+            await login({
               email: values.email,
               password: values.password,
             });
+
             // compareRegisterData(values);
           }}
         >
