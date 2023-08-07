@@ -14,7 +14,7 @@ import {
   LoggedStyled,
 } from "./NavbarStyles";
 import { FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
 import { CartModal } from "../Cart/CartModal";
@@ -29,20 +29,21 @@ export const Navbar = () => {
   const bodyStyle = document.body.style;
   const [isLocked, setIsLocked] = useState(bodyStyle.overflow === "hidden");
   const [isHiddenMenu, setHiddenMenu] = useState(true);
-  const [isRegisterData, setRegisterData] = useState("");
+  // const [isRegisterData, setRegisterData] = useState("");
   const [isLogged, setLogged] = useState("");
 
   const isMobileRes = useMediaQuery({ maxWidth: 500 });
 
   const isMediumScreen = useMediaQuery({ maxWidth: 800 });
   const changeLogo = useMediaQuery({ maxWidth: 1170 });
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const datosGuardados = localStorage.getItem("datos");
-    if (datosGuardados) {
-      setRegisterData(JSON.parse(datosGuardados));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const datosGuardados = localStorage.getItem("datos");
+  //   if (datosGuardados) {
+  //     setRegisterData(JSON.parse(datosGuardados));
+  //   }
+  // }, []);
 
   useEffect(() => {
     const isAuth = async () => {
@@ -149,6 +150,7 @@ export const Navbar = () => {
                 style={{ color: "red" }}
                 onClick={async () => {
                   await logout();
+                  window.location.reload();
                 }}
               />
             </LoggedStyled>

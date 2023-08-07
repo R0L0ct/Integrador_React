@@ -3,7 +3,7 @@ import { SELECTED_CATEGORY } from "./categories.actions";
 
 const INITIAL_STATE = {
   categories: categories,
-  selectedCategory: "t-shirt",
+  selectedCategory: "64c0634776c6e26dded1279e",
 };
 
 const categoriesReducer = (state = INITIAL_STATE, action) => {

@@ -2,24 +2,48 @@ import React from "react";
 import { ProductCardContainer } from "./ProductosStyles";
 import { useSelector } from "react-redux";
 import { Producto } from "./Producto";
+import { useEffect } from "react";
+import { useState } from "react";
+import { getAllProducts } from "../../api/data";
 
 export const Productos = () => {
-  let products = useSelector((state) => state.products.products);
+  // let products = useSelector((state) => state.products.products);
   const selectedCategory = useSelector(
     (state) => state.categories.selectedCategory
   );
+  let [products, setProducts] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  if (selectedCategory) {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productsData = await getAllProducts();
+        setProducts(productsData.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (selectedCategory && !loading) {
     products = products.filter(
-      (producto) => producto.category === selectedCategory
+      (producto) => producto.categoryId === selectedCategory
     );
   }
 
   return (
     <ProductCardContainer>
-      {products.map((productos) => (
-        <Producto key={productos.id} {...productos} />
-      ))}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        products.map((productos) => (
+          <Producto key={productos.id} {...productos} />
+        ))
+      )}
     </ProductCardContainer>
   );
 };

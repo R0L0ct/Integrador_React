@@ -55,6 +55,8 @@ export const Login = () => {
               password: values.password,
             });
 
+            navigate("/");
+            window.location.reload();
             // compareRegisterData(values);
           }}
         >

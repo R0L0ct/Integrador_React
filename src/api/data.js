@@ -42,4 +42,29 @@ const getUserBySessionToken = async () => {
   }
 };
 
-export { register, login, getUserBySessionToken, logout };
+const getAllProducts = async () => {
+  try {
+    const response = await axios.get(`${API}/product`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAllCategories = async () => {
+  try {
+    const response = await axios.get(`${API}/category`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  register,
+  login,
+  getUserBySessionToken,
+  logout,
+  getAllProducts,
+  getAllCategories,
+};

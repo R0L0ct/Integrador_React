@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectedCategory as categoriesActions } from "../../redux/categories/categories.actions";
 import { useMediaQuery } from "react-responsive";
 
-export const Category = ({ title, category }) => {
+export const Category = ({ name, id }) => {
   const query = useMediaQuery({ maxWidth: 215 });
   const selectedCategory = useSelector(
     (state) => state.categories.selectedCategory
@@ -16,11 +16,11 @@ export const Category = ({ title, category }) => {
   const dispatch = useDispatch();
   return (
     <CategoryStyled
-      onClick={() => dispatch(categoriesActions(category))}
+      onClick={() => dispatch(categoriesActions(id))}
       whileHover={() => (!query ? { scale: 1.1 } : { scale: 0.9 })}
     >
-      <FilterContainer selected={category === selectedCategory}>
-        <CategoryTitle>{title}</CategoryTitle>
+      <FilterContainer selected={id === selectedCategory}>
+        <CategoryTitle>{name}</CategoryTitle>
       </FilterContainer>
     </CategoryStyled>
   );

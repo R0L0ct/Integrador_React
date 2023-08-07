@@ -13,7 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
 import { useState } from "react";
 
-export const Producto = ({ title, img, desc, price, id, talle }) => {
+export const Producto = ({
+  name,
+  image,
+  description,
+  price,
+  id,
+  inventoryItems,
+}) => {
   const sizeState = useSelector((state) => state.cart.size);
   const selectedSizeState = useSelector((state) => state.cart.selectedSize);
   const dispatch = useDispatch();
@@ -30,9 +37,9 @@ export const Producto = ({ title, img, desc, price, id, talle }) => {
   return (
     <ProductCardStyled>
       <ProductCardInfo>
-        <ProductCardImage src={img} alt={title} />
-        <ProductTitle>{title}</ProductTitle>
-        <ProductDesc>Material: {desc}</ProductDesc>
+        <ProductCardImage src={image} alt={name} />
+        <ProductTitle>{name}</ProductTitle>
+        <ProductDesc>Material: {description}</ProductDesc>
         <ProductPrice>
           Precio:
           <span
@@ -52,22 +59,22 @@ export const Producto = ({ title, img, desc, price, id, talle }) => {
             gap: "5px",
           }}
         >
-          {talle.map((size) => {
+          {inventoryItems.map((item) => {
             return (
               <SizeButton
-                key={size}
-                id={`${id}-${size}`}
+                key={item.id}
+                id={`${id}-${item.size}`}
                 style={
-                  selectedProduct?.size === size
+                  selectedProduct?.size === item.size
                     ? { border: "1px solid red" }
                     : {}
                 }
                 onClick={() => {
-                  dispatch(cartActions.addSelectedSize(`${id}-${size}`));
-                  handleSizeButtonClick(size);
+                  dispatch(cartActions.addSelectedSize(`${id}-${item.size}`));
+                  handleSizeButtonClick(item.size);
                 }}
               >
-                {size}
+                {item.size}
               </SizeButton>
             );
           })}
@@ -77,7 +84,13 @@ export const Producto = ({ title, img, desc, price, id, talle }) => {
         onClick={() => {
           if (selectedSizeState === `${id}-${sizeState}`) {
             dispatch(
-              cartActions.addProduct({ id, title, img, price, desc, talle })
+              cartActions.addProduct({
+                id,
+                name,
+                image,
+                price,
+                description,
+              })
             );
             dispatch(cartActions.addProductSize(""));
             setSelectedProduct({ id: null, size: null });
