@@ -11,7 +11,7 @@ export const checkoutValidationSchema = Yup.object({
   city: Yup.string().required("Campo requerido"),
   adress: Yup.string().required("Campo requerido"),
   country: Yup.string().required("Campo requerido"),
-  region: Yup.string().required("Campo requerido"),
+  state_province: Yup.string().required("Campo requerido"),
   phone: Yup.string().required("Campo requerido"),
 });
 

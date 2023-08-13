@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ProductCardContainerStyled,
   ProductCardDesc,
@@ -17,9 +17,11 @@ import {
 } from "./CheckoutProductsStyles";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
+import { getProduct } from "../../api/data";
 export const CheckoutProducts = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const [disabled, setDisabled] = useState(false);
 
   return (
     <ProductsContainerStyled>
@@ -29,24 +31,26 @@ export const CheckoutProducts = () => {
           ? cartItems.map((items) =>
               items.sizes.map((size) => (
                 <ProductCardStyled key={`${size.id}-${size.talle}`}>
-                  <ProductCardImg src={items.img} />
+                  <ProductCardImg src={items.image} />
                   <ProductInfoContainer>
-                    <ProductCardTitle>{items.title}</ProductCardTitle>
-                    <ProductCardDesc>{items.desc}</ProductCardDesc>
+                    <ProductCardTitle>{items.name}</ProductCardTitle>
+                    <ProductCardDesc>{items.description}</ProductCardDesc>
                     <ProductCardSize>{size.talle}</ProductCardSize>
                     <ProductCardPrice>${items.price}</ProductCardPrice>
                   </ProductInfoContainer>
                   <ProductCounterContainer>
                     <ProductCounterLess
-                      onClick={() =>
+                      onClick={() => {
                         dispatch(
                           cartActions.removeQuantityFromProduct(
                             items.id,
                             size.talle,
                             1
                           )
-                        )
-                      }
+                        );
+
+                        setDisabled(false);
+                      }}
                     >
                       -
                     </ProductCounterLess>
@@ -54,15 +58,27 @@ export const CheckoutProducts = () => {
                       {size.quantity}
                     </ProductCounterQuantity>
                     <ProductCounterPlus
-                      onClick={() =>
-                        dispatch(
-                          cartActions.addQuantityToProduct(
-                            items.id,
-                            size.talle,
-                            1
-                          )
-                        )
-                      }
+                      onClick={async () => {
+                        const producto = await getProduct(items.id);
+                        const inventory = producto.data.inventoryItems.filter(
+                          (item) => item.size === size.talle
+                        );
+                        const stock = inventory.map((s) => s.stock);
+                        if (size.quantity < stock[0]) {
+                          dispatch(
+                            cartActions.addQuantityToProduct(
+                              items.id,
+                              size.talle,
+                              1
+                            )
+                          );
+                        }
+
+                        if (size.quantity === stock[0] - 1) {
+                          setDisabled(true);
+                        }
+                      }}
+                      disabled={disabled}
                     >
                       +
                     </ProductCounterPlus>

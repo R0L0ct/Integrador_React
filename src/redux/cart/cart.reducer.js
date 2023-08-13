@@ -1,8 +1,10 @@
 import {
+  ADD_INVENTORY,
   ADD_PRODUCT,
   ADD_QUANTITY_TO_PRODUCT,
   ADD_SELECTED_SIZE,
   ADD_SIZE,
+  ADD_TOTAL,
   REMOVE_ALL_PRODUCTS,
   REMOVE_QUANTITY_FROM_PRODUCT,
   TOGGLE_CART,
@@ -20,6 +22,8 @@ const INITIAL_STATE = {
   selectedSize: "",
   shippingCost: 0,
   hidden: true,
+  total: 0,
+  inventory: [],
 };
 
 export const cartReducer = (state = INITIAL_STATE, action) => {
@@ -35,7 +39,8 @@ export const cartReducer = (state = INITIAL_STATE, action) => {
         cartItems: addProductToCart(
           state.cartItems,
           action.payload,
-          state.size
+          state.size,
+          state.inventory
         ),
         shippingCost: shippingCost,
       };
@@ -76,6 +81,16 @@ export const cartReducer = (state = INITIAL_STATE, action) => {
           action.payload.quantity
         ),
         shippingCost: resetShippingCost(state.cartItems, shippingCost),
+      };
+    case ADD_TOTAL:
+      return {
+        ...state,
+        total: action.payload,
+      };
+    case ADD_INVENTORY:
+      return {
+        ...state,
+        inventory: action.payload,
       };
     default:
       return state;

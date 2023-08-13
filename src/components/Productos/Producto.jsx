@@ -12,6 +12,7 @@ import { Button } from "../UI/button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
 import { useState } from "react";
+import { getProduct } from "../../api/data";
 
 export const Producto = ({
   name,
@@ -23,6 +24,7 @@ export const Producto = ({
 }) => {
   const sizeState = useSelector((state) => state.cart.size);
   const selectedSizeState = useSelector((state) => state.cart.selectedSize);
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
   const [selectedProduct, setSelectedProduct] = useState({
     id: null,
@@ -81,8 +83,13 @@ export const Producto = ({
         </div>
       </ProductCardInfo>
       <Button
-        onClick={() => {
+        onClick={async () => {
           if (selectedSizeState === `${id}-${sizeState}`) {
+            const inventory = inventoryItems.find(
+              (item) => item.size === sizeState
+            );
+            dispatch(cartActions.addInventory(inventory));
+
             dispatch(
               cartActions.addProduct({
                 id,
@@ -92,6 +99,8 @@ export const Producto = ({
                 description,
               })
             );
+
+            console.log(inventory.stock);
             dispatch(cartActions.addProductSize(""));
             setSelectedProduct({ id: null, size: null });
           } else {

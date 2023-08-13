@@ -51,9 +51,72 @@ const getAllProducts = async () => {
   }
 };
 
+const getProduct = async (id) => {
+  try {
+    const response = await axios.get(`${API}/product/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getAllCategories = async () => {
   try {
     const response = await axios.get(`${API}/category`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const createCustomer = async (data) => {
+  try {
+    const response = await axios.post(`${API}/customer`, data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getCustomer = async (id) => {
+  try {
+    const response = await axios.get(`${API}/customer/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAllCustomers = async () => {
+  try {
+    const response = await axios.get(`${API}/customer`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const createOrder = async (data) => {
+  try {
+    const response = await axios.post(`${API}/order`, data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAllOrders = async () => {
+  try {
+    const response = await axios.get(`${API}/order`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const createOrderProduct = async (data) => {
+  try {
+    const response = await axios.post(`${API}/order/order-product`, data);
     return response;
   } catch (error) {
     console.log(error);
@@ -67,4 +130,11 @@ export {
   logout,
   getAllProducts,
   getAllCategories,
+  getProduct,
+  createCustomer,
+  createOrder,
+  createOrderProduct,
+  getCustomer,
+  getAllCustomers,
+  getAllOrders,
 };

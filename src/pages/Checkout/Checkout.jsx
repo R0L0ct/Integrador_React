@@ -27,6 +27,7 @@ export const Checkout = () => {
   const totalPrice = cartItems.reduce((acc, item) => {
     return (acc += item.price * item.quantity);
   }, 0);
+  // dispatch(cartActions.addTotalPrice(totalPrice + shippingCost));
 
   return (
     <CheckoutContainerStyled>

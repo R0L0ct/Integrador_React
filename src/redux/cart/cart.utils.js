@@ -1,4 +1,9 @@
-export const addProductToCart = (cartItems, newItem, sizeProduct) => {
+export const addProductToCart = (
+  cartItems,
+  newItem,
+  sizeProduct,
+  inventory
+) => {
   const cartProductIndex = cartItems.findIndex(
     (item) => item.id === newItem.id
   );
@@ -7,12 +12,20 @@ export const addProductToCart = (cartItems, newItem, sizeProduct) => {
     const cartSizeProductIndex = cartItems[cartProductIndex].sizes.findIndex(
       (size) => size.talle === sizeProduct
     );
+    const cartInventoryIndex = cartItems[cartProductIndex].inventory.findIndex(
+      (size) => size.size === sizeProduct
+    );
 
     if (cartSizeProductIndex > -1) {
       const newSizes = [...cartItems[cartProductIndex].sizes];
+      const newInventory = [...cartItems[cartProductIndex].inventory];
       newSizes[cartSizeProductIndex] = {
         ...newSizes[cartSizeProductIndex],
         quantity: newSizes[cartSizeProductIndex].quantity + 1,
+      };
+      newInventory[cartInventoryIndex] = {
+        ...newInventory[cartInventoryIndex],
+        quantity: newInventory[cartInventoryIndex].quantity + 1,
       };
 
       return cartItems.map((item, index) =>
@@ -21,6 +34,7 @@ export const addProductToCart = (cartItems, newItem, sizeProduct) => {
               ...item,
               quantity: item.quantity + 1,
               sizes: newSizes,
+              inventory: newInventory,
             }
           : item
       );
@@ -33,12 +47,24 @@ export const addProductToCart = (cartItems, newItem, sizeProduct) => {
           id: newItem.id + "-" + sizeProduct,
         },
       ];
+
+      const newInventory = [
+        ...cartItems[cartProductIndex].inventory,
+        {
+          id: inventory.id,
+          size: inventory.size,
+          stock: inventory.stock,
+          quantity: 1,
+          productId: inventory.productId,
+        },
+      ];
       return cartItems.map((item, index) =>
         index === cartProductIndex
           ? {
               ...item,
               quantity: item.quantity + 1,
               sizes: newSizes,
+              inventory: newInventory,
             }
           : item
       );
@@ -54,6 +80,15 @@ export const addProductToCart = (cartItems, newItem, sizeProduct) => {
             talle: sizeProduct,
             quantity: 1,
             id: newItem.id + "-" + sizeProduct,
+          },
+        ],
+        inventory: [
+          {
+            id: inventory.id,
+            size: inventory.size,
+            stock: inventory.stock,
+            quantity: 1,
+            productId: inventory.productId,
           },
         ],
       },
