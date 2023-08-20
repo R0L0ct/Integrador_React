@@ -12,7 +12,6 @@ import { Button } from "../UI/button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
 import { useState } from "react";
-import { getProduct } from "../../api/data";
 
 export const Producto = ({
   name,
@@ -100,7 +99,7 @@ export const Producto = ({
               })
             );
 
-            console.log(inventory.stock);
+            console.log(cartItems);
             dispatch(cartActions.addProductSize(""));
             setSelectedProduct({ id: null, size: null });
           } else {

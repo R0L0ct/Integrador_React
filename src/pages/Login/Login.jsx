@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { loginInitialValues } from "../../formik/initialValues";
 import { loginValidationSchema } from "../../formik/validationSchema";
@@ -12,35 +12,25 @@ import {
   LoginFormContainer,
   SubmitStyled,
 } from "./LoginStyles";
-import { login } from "../../api/data";
+import { login, refreshToken } from "../../api/data";
+import { useDispatch } from "react-redux";
+import * as authActions from "../../redux/authentication/auth.actions";
 
 export const Login = () => {
-  const navigate = useNavigate();
-  const [registerData, setRegisterData] = useState("");
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const datosGuardados = localStorage.getItem("datos");
-    if (datosGuardados) {
-      setRegisterData(JSON.parse(datosGuardados));
+  const tokenRefresh = async () => {
+    try {
+      const res = await refreshToken();
+      dispatch(authActions.addToken(res.data));
+      console.log(res);
+      setTimeout(() => {
+        tokenRefresh();
+      }, res.data.expiresIn * 1000 - 6000);
+    } catch (error) {
+      console.log(error);
     }
-  }, []);
-
-  // function compareRegisterData(values) {
-  //   if (
-  //     values.email === registerData.email &&
-  //     values.password === registerData.password
-  //   ) {
-  //     //   window.location.reload();
-  //     localStorage.setItem(
-  //       "datos",
-  //       JSON.stringify({ ...registerData, logged: true })
-  //     );
-  //     navigate("/");
-  //     window.location.reload();
-  //   } else {
-  //     alert("Usuario no encontrado");
-  //   }
-  // }
+  };
 
   return (
     <LoginContainerStyled>
@@ -50,14 +40,24 @@ export const Login = () => {
           initialValues={loginInitialValues}
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
-            await login({
-              email: values.email,
-              password: values.password,
-            });
+            try {
+              const token = await login({
+                email: values.email,
+                password: values.password,
+              });
+              dispatch(authActions.addToken(token.data));
+              const setTimeToken = () => {
+                setTimeout(() => {
+                  tokenRefresh();
+                }, token.data.token.expiresIn * 1000 - 6000);
+              };
+              setTimeToken();
 
-            navigate("/");
-            window.location.reload();
-            // compareRegisterData(values);
+              console.log(token);
+              // navigate("/");
+            } catch (error) {
+              console.log(error);
+            }
           }}
         >
           <FormikForm>

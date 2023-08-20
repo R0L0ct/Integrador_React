@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   CounterContainerStyled,
   CounterLessStyled,
@@ -16,12 +16,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 //import { CartProduct } from "./CartProduct";
 import * as cartActions from "../../redux/cart/cart.actions";
-import { getProduct } from "../../api/data";
 
 export const CartProducts = () => {
   const dispatch = useDispatch();
   const cartItem = useSelector((state) => state.cart.cartItems);
-  const [disabled, setDisabled] = useState(false);
 
   return (
     <ProductCardContainerStyled>
@@ -47,31 +45,20 @@ export const CartProducts = () => {
                       1
                     )
                   );
-                  setDisabled(false);
-                  // console.log(item);
                 }}
               >
                 -
               </CounterLessStyled>
               <CounterQuantity>{size.quantity}</CounterQuantity>
               <CounterPlusStyled
-                onClick={async () => {
-                  const producto = await getProduct(item.id);
-                  const inventory = producto.data.inventoryItems.filter(
-                    (item) => item.size === size.talle
-                  );
-                  const stock = inventory.map((s) => s.stock);
-                  if (size.quantity < stock[0]) {
+                onClick={() => {
+                  if (size.quantity < item.inventory[0].stock) {
                     dispatch(
                       cartActions.addQuantityToProduct(item.id, size.talle, 1)
                     );
                   }
-                  if (size.quantity === stock[0] - 1) {
-                    setDisabled(true);
-                  }
-                  // console.log(disabled);
                 }}
-                disabled={disabled}
+                disabled={size.quantity === item.inventory[0].stock}
               >
                 +
               </CounterPlusStyled>

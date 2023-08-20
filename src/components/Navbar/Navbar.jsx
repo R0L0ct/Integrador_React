@@ -17,10 +17,11 @@ import { FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
+import * as authActions from "../../redux/authentication/auth.actions";
 import { CartModal } from "../Cart/CartModal";
 import { FaBars } from "react-icons/fa";
 import { useMediaQuery } from "react-responsive";
-import { getUserBySessionToken, logout } from "../../api/data";
+import { logout } from "../../api/data";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -30,36 +31,14 @@ export const Navbar = () => {
   const [isLocked, setIsLocked] = useState(bodyStyle.overflow === "hidden");
   const [isHiddenMenu, setHiddenMenu] = useState(true);
   // const [isRegisterData, setRegisterData] = useState("");
-  const [isLogged, setLogged] = useState("");
 
   const isMobileRes = useMediaQuery({ maxWidth: 500 });
 
   const isMediumScreen = useMediaQuery({ maxWidth: 800 });
   const changeLogo = useMediaQuery({ maxWidth: 1170 });
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const datosGuardados = localStorage.getItem("datos");
-  //   if (datosGuardados) {
-  //     setRegisterData(JSON.parse(datosGuardados));
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    const isAuth = async () => {
-      const userAuth = await getUserBySessionToken();
-      if (userAuth) {
-        setLogged(userAuth.data);
-      } else {
-        setLogged("");
-      }
-    };
-    isAuth();
-    // const datosGuardados = localStorage.getItem("datos");
-    // if (datosGuardados) {
-    //   setLogged(JSON.parse(datosGuardados));
-    // }
-  }, []);
+  const { user } = useSelector((state) => state.auth.token);
+  const tokenState = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     bodyStyle.overflow = isLocked ? "hidden" : "auto";
@@ -79,6 +58,17 @@ export const Navbar = () => {
 
   const toggleOverflow = () => setIsLocked(!isLocked);
   const toggleMenu = () => setHiddenMenu(!isHiddenMenu);
+
+  // useEffect(() => {
+  //   const getUserByToken = async () => {
+  //     await getUserBySessionToken();
+  //   };
+  //   const o = getUserByToken();
+  //   // dispatch(
+  //   //   authActions.addToken(...tokenState, { user: getUserByToken.name })
+  //   // );
+  //   console.log(o);
+  // }, []);
 
   const cartCounter = cartItems.reduce((acc, item) => {
     return (acc += item.quantity);
@@ -143,19 +133,20 @@ export const Navbar = () => {
               }}
             />
           </CartIconContainerStyled>
-          {isLogged ? (
+          {user ? (
             <LoggedStyled isHiddenMenu={isHiddenMenu}>
-              {`Hi, ${isLogged.name}`}
+              {`Hi, ${user.name}`}
               <FaSignOutAlt
                 style={{ color: "red" }}
                 onClick={async () => {
                   await logout();
-                  window.location.reload();
+                  dispatch(authActions.addToken(""));
+                  navigate("/");
                 }}
               />
             </LoggedStyled>
           ) : (
-            <div>
+            <div style={{ display: "flex", gap: "10px" }}>
               <Link to="login">
                 <RegisterStyled isHiddenMenu={isHiddenMenu}>
                   Login

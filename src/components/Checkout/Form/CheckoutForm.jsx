@@ -21,25 +21,16 @@ import {
   createOrderProduct,
   getAllCustomers,
   getAllOrders,
-  getUserBySessionToken,
+  updateInventory,
 } from "../../../api/data";
 
 export const CheckoutForm = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [userId, setUserId] = useState("");
   const { shippingCost } = useSelector((state) => state.cart);
+  const tokenState = useSelector((state) => state.auth.token);
   const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getUserId = async () => {
-      const user = await getUserBySessionToken();
-      setUserId(user.data.id);
-    };
-
-    getUserId();
-  });
 
   const [isCustomer, setCustomer] = useState("");
   useEffect(() => {
@@ -47,7 +38,7 @@ export const CheckoutForm = () => {
       const customerData = async () => {
         const customer = await getAllCustomers();
         const customerUserId = customer.data.filter(
-          (user) => user.userId === userId
+          (user) => user.userId === tokenState.user.id
         );
         if (customerUserId) {
           setCustomer(customerUserId[0]);
@@ -79,7 +70,7 @@ export const CheckoutForm = () => {
         onSubmit={async (values) => {
           const customer = await getAllCustomers();
           const customerUserId = customer.data.filter(
-            (user) => user.userId === userId
+            (user) => user.userId === tokenState.user.id
           );
           if (!customerUserId) {
             await createCustomer({
@@ -93,13 +84,13 @@ export const CheckoutForm = () => {
                 city: values.city,
                 adress: values.adress,
               },
-              userId: userId,
+              userId: tokenState.user.id,
             });
           }
 
           const customerData = await getAllCustomers();
           const customerId = await customerData.data.filter(
-            (customer) => customer.userId === userId
+            (customer) => customer.userId === tokenState.user.id
           );
           await createOrder({
             total: totalPrice + shippingCost,
@@ -120,6 +111,10 @@ export const CheckoutForm = () => {
                 productId: item.id,
                 inventoryId: invent.id,
               });
+              // const res = await updateInventory(invent.id, {
+              //   stock: invent.stock - invent.quantity,
+              // });
+              // console.log(res);
             });
           });
 

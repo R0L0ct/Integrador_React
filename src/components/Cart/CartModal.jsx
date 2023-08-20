@@ -18,7 +18,6 @@ import { CartProducts } from "../CartProductos/CartProducts";
 import { BsTrash } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import { getUserBySessionToken } from "../../api/data";
 
 export const CartModal = ({ toggleOverflow }) => {
   const toggleHidden = useSelector((state) => state.cart.hidden);
@@ -26,6 +25,7 @@ export const CartModal = ({ toggleOverflow }) => {
   const isMobileRes = useMediaQuery({ maxWidth: 500 });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const tokenState = useSelector((state) => state.auth.token);
   const toggleDisabled = () => {
     if (cartItems.length) {
       return false;
@@ -36,19 +36,6 @@ export const CartModal = ({ toggleOverflow }) => {
   const TotalPrice = cartItems.reduce((acc, item) => {
     return (acc += item.price * item.quantity);
   }, 0);
-
-  const [isLogged, setLogged] = useState("");
-  useEffect(() => {
-    const isAuth = async () => {
-      const userAuth = await getUserBySessionToken();
-      if (userAuth) {
-        setLogged(userAuth.data);
-      } else {
-        setLogged("");
-      }
-    };
-    isAuth();
-  }, []);
 
   return (
     <>
@@ -96,7 +83,8 @@ export const CartModal = ({ toggleOverflow }) => {
               disabled={toggleDisabled()}
               type="submit"
               onClick={() => {
-                if (isLogged) {
+                if (tokenState) {
+                  console.log(tokenState);
                   navigate("checkout");
                   if (!isMobileRes) {
                     toggleOverflow();

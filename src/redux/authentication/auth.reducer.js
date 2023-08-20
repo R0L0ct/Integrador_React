@@ -1,7 +1,8 @@
-import { IS_AUTH } from "./auth.actions";
+import { ADD_TOKEN, IS_AUTH } from "./auth.actions";
 
 const INITIAL_STATE = {
   isAuth: false,
+  token: "",
 };
 
 export const authReducer = (state = INITIAL_STATE, action) => {
@@ -10,6 +11,12 @@ export const authReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isAuth: action.payload,
+      };
+
+    case ADD_TOKEN:
+      return {
+        ...state,
+        token: action.payload,
       };
 
     default:
