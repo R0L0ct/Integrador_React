@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CardContainer } from "./RecommendedCardsStyles";
 import { RecommendedCard } from "./RecommendedCard";
 import { getAllProducts } from "../../api/data";
+import { Audio } from "react-loader-spinner";
 
 export const RecommendedCards = () => {
   let [products, setProducts] = useState("");
@@ -27,7 +28,15 @@ export const RecommendedCards = () => {
   return (
     <CardContainer>
       {loading ? (
-        <p>Loading...</p>
+        <Audio
+          height="80"
+          width="80"
+          radius="9"
+          color="green"
+          ariaLabel="three-dots-loading"
+          wrapperStyle
+          wrapperClass
+        />
       ) : (
         products
           .slice(1, 7)

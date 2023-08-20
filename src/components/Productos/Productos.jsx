@@ -5,6 +5,7 @@ import { Producto } from "./Producto";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getAllProducts } from "../../api/data";
+import { ProgressBar } from "react-loader-spinner";
 
 export const Productos = () => {
   // let products = useSelector((state) => state.products.products);
@@ -38,7 +39,15 @@ export const Productos = () => {
   return (
     <ProductCardContainer>
       {loading ? (
-        <p>Loading...</p>
+        <ProgressBar
+          height="80"
+          width="80"
+          ariaLabel="progress-bar-loading"
+          wrapperStyle={{}}
+          wrapperClass="progress-bar-wrapper"
+          borderColor="#F4442E"
+          barColor="#51E5FF"
+        />
       ) : (
         products.map((productos) => (
           <Producto key={productos.id} {...productos} />
