@@ -30,12 +30,88 @@ export const Producto = ({
     size: null,
   });
 
+  const { role } = useSelector((state) => state.auth.token.token);
   const handleSizeButtonClick = (size) => {
     dispatch(cartActions.addProductSize(""));
     dispatch(cartActions.addProductSize(size));
     setSelectedProduct({ id, size });
   };
-  return (
+  return role === "admin" ? (
+    <ProductCardStyled>
+      <ProductCardInfo>
+        <input type="checkbox" />
+        <ProductCardImage src={image} alt={name} />
+        <ProductTitle>{name}</ProductTitle>
+        <ProductDesc>Material: {description}</ProductDesc>
+        <ProductPrice>
+          Precio:
+          <span
+            style={{
+              fontWeight: "600",
+            }}
+          >
+            ${price}
+          </span>
+        </ProductPrice>
+
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            gap: "5px",
+          }}
+        >
+          {inventoryItems.map((item) => {
+            return (
+              <SizeButton
+                key={item.id}
+                id={`${id}-${item.size}`}
+                style={
+                  selectedProduct?.size === item.size
+                    ? { border: "1px solid red" }
+                    : {}
+                }
+                onClick={() => {
+                  dispatch(cartActions.addSelectedSize(`${id}-${item.size}`));
+                  handleSizeButtonClick(item.size);
+                }}
+              >
+                {item.size}
+              </SizeButton>
+            );
+          })}
+        </div>
+      </ProductCardInfo>
+      <Button
+        onClick={async () => {
+          if (selectedSizeState === `${id}-${sizeState}`) {
+            const inventory = inventoryItems.find(
+              (item) => item.size === sizeState
+            );
+            dispatch(cartActions.addInventory(inventory));
+
+            dispatch(
+              cartActions.addProduct({
+                id,
+                name,
+                image,
+                price,
+                description,
+              })
+            );
+
+            console.log(cartItems);
+            dispatch(cartActions.addProductSize(""));
+            setSelectedProduct({ id: null, size: null });
+          } else {
+            alert("Selecciona un talle");
+            setSelectedProduct({ id: null, size: null });
+          }
+        }}
+      />
+    </ProductCardStyled>
+  ) : (
     <ProductCardStyled>
       <ProductCardInfo>
         <ProductCardImage src={image} alt={name} />

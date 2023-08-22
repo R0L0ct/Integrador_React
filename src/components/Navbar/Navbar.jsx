@@ -38,7 +38,6 @@ export const Navbar = () => {
   const changeLogo = useMediaQuery({ maxWidth: 1170 });
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth.token);
-  const tokenState = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     bodyStyle.overflow = isLocked ? "hidden" : "auto";
@@ -58,17 +57,6 @@ export const Navbar = () => {
 
   const toggleOverflow = () => setIsLocked(!isLocked);
   const toggleMenu = () => setHiddenMenu(!isHiddenMenu);
-
-  // useEffect(() => {
-  //   const getUserByToken = async () => {
-  //     await getUserBySessionToken();
-  //   };
-  //   const o = getUserByToken();
-  //   // dispatch(
-  //   //   authActions.addToken(...tokenState, { user: getUserByToken.name })
-  //   // );
-  //   console.log(o);
-  // }, []);
 
   const cartCounter = cartItems.reduce((acc, item) => {
     return (acc += item.quantity);

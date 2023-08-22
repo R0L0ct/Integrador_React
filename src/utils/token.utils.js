@@ -7,7 +7,7 @@ export const tokenRefresh = async (dispatch) => {
     dispatch(authActions.addToken(res.data));
     setTimeout(() => {
       tokenRefresh(dispatch);
-    }, res.data.expiresIn * 1000 - 6000);
+    }, res.data.token.expiresIn * 1000 - 10000);
   } catch (error) {
     console.log(error);
   }

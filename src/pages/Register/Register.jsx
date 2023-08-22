@@ -16,6 +16,7 @@ import { register } from "../../api/data";
 
 export const Register = () => {
   const navigate = useNavigate();
+
   return (
     <RegisterContainerStyled>
       <RegisterFormContainer>
@@ -24,14 +25,16 @@ export const Register = () => {
           initialValues={registerInitialValues}
           validationSchema={registerValidationSchema}
           onSubmit={async (values) => {
-            // localStorage.setItem("datos", JSON.stringify(values));
-            await register({
+            const user = await register({
               name: values.name,
               email: values.email,
               password: values.password,
             });
-            navigate("/");
-            window.location.reload();
+            if (user.data === "ALREADY_USER") {
+              alert("El email ya existe, proba con otro");
+            } else {
+              navigate("/");
+            }
           }}
         >
           <FormikForm>

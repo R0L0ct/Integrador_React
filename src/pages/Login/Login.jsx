@@ -18,15 +18,16 @@ import * as authActions from "../../redux/authentication/auth.actions";
 
 export const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const tokenRefresh = async () => {
     try {
       const res = await refreshToken();
       dispatch(authActions.addToken(res.data));
-      console.log(res);
+      console.log(res.data);
       setTimeout(() => {
         tokenRefresh();
-      }, res.data.expiresIn * 1000 - 6000);
+      }, res.data.token.expiresIn * 1000 - 10000);
     } catch (error) {
       console.log(error);
     }
@@ -45,16 +46,21 @@ export const Login = () => {
                 email: values.email,
                 password: values.password,
               });
-              dispatch(authActions.addToken(token.data));
-              const setTimeToken = () => {
-                setTimeout(() => {
-                  tokenRefresh();
-                }, token.data.token.expiresIn * 1000 - 6000);
-              };
-              setTimeToken();
-
-              console.log(token);
-              // navigate("/");
+              if (
+                token.data === "NOT_FOUND_USER" ||
+                token.data === "INCORRECT_PASSWORD"
+              ) {
+                alert("Email o contraseña incorrectos");
+              } else {
+                dispatch(authActions.addToken(token.data));
+                const setTimeToken = () => {
+                  setTimeout(() => {
+                    tokenRefresh();
+                  }, token.data.token.expiresIn * 1000 - 10000);
+                };
+                setTimeToken();
+                navigate("/");
+              }
             } catch (error) {
               console.log(error);
             }
@@ -83,6 +89,22 @@ export const Login = () => {
             </ContainerStyled>
             <div>
               <SubmitStyled type="submit">Enviar</SubmitStyled>
+            </div>
+            <div>
+              <p style={{ color: "white" }}>
+                No estas registrado?{" "}
+                <span
+                  style={{
+                    cursor: "pointer",
+                    fontWeight: "600",
+                  }}
+                  onClick={() => {
+                    navigate("/register");
+                  }}
+                >
+                  Registrarse
+                </span>
+              </p>
             </div>
           </FormikForm>
         </FormikContainer>

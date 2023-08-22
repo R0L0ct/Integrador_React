@@ -29,13 +29,13 @@ export const RecommendedCards = () => {
     <CardContainer>
       {loading ? (
         <Audio
-          height="80"
-          width="80"
-          radius="9"
-          color="green"
-          ariaLabel="three-dots-loading"
-          wrapperStyle
-          wrapperClass
+          height="100"
+          width="100"
+          color="#4fa94d"
+          ariaLabel="audio-loading"
+          wrapperStyle={{}}
+          wrapperClass="wrapper-class"
+          visible={true}
         />
       ) : (
         products

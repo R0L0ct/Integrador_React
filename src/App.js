@@ -16,6 +16,7 @@ function App() {
 
   useEffect(() => {
     globalFunction();
+    // eslint-disable-next-line
   }, []);
   return (
     <Layout>

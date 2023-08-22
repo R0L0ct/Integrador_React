@@ -1,17 +1,9 @@
 import axios from "axios";
-
 const API = "http://localhost:3001/api/v1";
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  // headers: {
-  //   Authorization: `Bearer ${2} `,
-  // },
 });
-
-// const setAuthToken = (token) => {
-//   axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-// };
 
 const register = async (data) => {
   try {
@@ -25,8 +17,6 @@ const register = async (data) => {
 const login = async (data) => {
   try {
     const response = await axiosInstance.post(`${API}/auth/login`, data);
-    // const token = response.data;
-    // setAuthToken(token);
     return response;
   } catch (error) {
     console.log(error);
@@ -78,9 +68,27 @@ const getAllCategories = async () => {
   }
 };
 
+const getAllUsers = async () => {
+  try {
+    const response = await axiosInstance.get(`${API}/user`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const createCustomer = async (data) => {
   try {
     const response = await axiosInstance.post(`${API}/customer`, data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateCustomer = async (id, data) => {
+  try {
+    const response = await axiosInstance.patch(`${API}/customer/${id}`, data);
     return response;
   } catch (error) {
     console.log(error);
@@ -105,9 +113,14 @@ const getAllCustomers = async () => {
   }
 };
 
-const createOrder = async (data) => {
+const createOrder = async (data, token) => {
   try {
-    const response = await axiosInstance.post(`${API}/order`, data);
+    const response = await axiosInstance.post(`${API}/order`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response;
   } catch (error) {
     console.log(error);
@@ -172,4 +185,6 @@ export {
   getAllOrders,
   refreshToken,
   updateInventory,
+  updateCustomer,
+  getAllUsers,
 };

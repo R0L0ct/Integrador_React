@@ -21,7 +21,8 @@ import {
   createOrderProduct,
   getAllCustomers,
   getAllOrders,
-  updateInventory,
+  updateCustomer,
+  // updateInventory,
 } from "../../../api/data";
 
 export const CheckoutForm = () => {
@@ -40,9 +41,8 @@ export const CheckoutForm = () => {
         const customerUserId = customer.data.filter(
           (user) => user.userId === tokenState.user.id
         );
-        if (customerUserId) {
+        if (customerUserId.length > 0) {
           setCustomer(customerUserId[0]);
-          console.log(customerUserId[0]);
           setLoading(false);
         } else {
           setCustomer("");
@@ -54,8 +54,18 @@ export const CheckoutForm = () => {
     } catch (error) {
       console.log(error);
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [tokenState]);
+
+  const savedUserValues = {
+    name: isCustomer?.name,
+    state_province: isCustomer.adress?.state_province,
+    city: isCustomer.adress?.city,
+    lastname: isCustomer?.lastname,
+    country: isCustomer.adress?.country,
+    email: isCustomer?.email,
+    adress: isCustomer.adress?.adress,
+    phone: isCustomer?.phone,
+  };
 
   const totalPrice = cartItems.reduce((acc, item) => {
     return (acc += item.price * item.quantity);
@@ -65,13 +75,19 @@ export const CheckoutForm = () => {
     <CheckoutFormStyled>
       <CheckoutTitleStyled>Completa los campos</CheckoutTitleStyled>
       <FormikContainer
-        initialValues={checkoutInitialValues}
+        initialValues={
+          !isLoading && savedUserValues
+            ? savedUserValues
+            : checkoutInitialValues
+        }
         validationSchema={checkoutValidationSchema}
+        enableReinitialize
         onSubmit={async (values) => {
           const customer = await getAllCustomers();
           const customerUserId = customer.data.filter(
             (user) => user.userId === tokenState.user.id
           );
+
           if (!customerUserId) {
             await createCustomer({
               name: values.name,
@@ -88,39 +104,62 @@ export const CheckoutForm = () => {
             });
           }
 
+          if (customerUserId) {
+            await updateCustomer(customerUserId[0].id, {
+              name: values.name,
+              lastname: values.lastname,
+              phone: values.phone,
+              email: values.email,
+              adress: {
+                country: values.country,
+                state_province: values.state_province,
+                city: values.city,
+                adress: values.adress,
+              },
+            });
+          }
+
           const customerData = await getAllCustomers();
           const customerId = await customerData.data.filter(
             (customer) => customer.userId === tokenState.user.id
           );
-          await createOrder({
-            total: totalPrice + shippingCost,
-            status: "pending",
-            customerId: customerId[0].id,
-          });
-          const orderData = await getAllOrders();
-          const orderId = await orderData.data.filter(
-            (order) => order.customerId === customerId[0].id
+          const orderCreate = await createOrder(
+            {
+              total: totalPrice + shippingCost,
+              status: "pending",
+              customerId: customerId[0].id,
+            },
+            tokenState.token.jwt
           );
 
-          cartItems.forEach(async (item) => {
-            item.inventory.forEach(async (invent) => {
-              await createOrderProduct({
-                amount: item.quantity,
-                shipping_cost: shippingCost,
-                orderId: orderId[0].id,
-                productId: item.id,
-                inventoryId: invent.id,
-              });
-              // const res = await updateInventory(invent.id, {
-              //   stock: invent.stock - invent.quantity,
-              // });
-              // console.log(res);
-            });
-          });
+          if (orderCreate.data === "SESION_NO_VALIDA") {
+            alert("Sesion no valida");
+          } else {
+            const orderData = await getAllOrders();
+            const orderId = await orderData.data.filter(
+              (order) => order.customerId === customerId[0].id
+            );
 
-          console.log(cartItems);
-          navigate("/completed");
-          dispatch(cartActions.removeAllProducts());
+            cartItems.forEach(async (item) => {
+              item.inventory.forEach(async (invent) => {
+                await createOrderProduct({
+                  amount: item.quantity,
+                  shipping_cost: shippingCost,
+                  orderId: orderId[0].id,
+                  productId: item.id,
+                  inventoryId: invent.id,
+                });
+                // const res = await updateInventory(invent.id, {
+                //   stock: invent.stock - invent.quantity,
+                // });
+                // console.log(res);
+              });
+            });
+
+            // console.log(cartItems);
+            navigate("/completed");
+            dispatch(cartActions.removeAllProducts());
+          }
         }}
       >
         <FormikForm>
@@ -131,7 +170,7 @@ export const CheckoutForm = () => {
                 name="name"
                 type="text"
                 id="nombre"
-                placeholder={isCustomer ? isCustomer.name : "Ingresa tu nombre"}
+                placeholder={"Ingresa tu nombre"}
               >
                 Nombre
               </Input>
@@ -140,9 +179,7 @@ export const CheckoutForm = () => {
                 name="lastname"
                 type="text"
                 id="apellido"
-                placeholder={
-                  isCustomer ? isCustomer.lastname : "Ingresa tu apellido"
-                }
+                placeholder={"Ingresa tu apellido"}
               >
                 Apellido
               </Input>
@@ -151,7 +188,7 @@ export const CheckoutForm = () => {
                 name="email"
                 type="text"
                 id="email"
-                placeholder={isCustomer ? isCustomer.email : "Ingresa tu email"}
+                placeholder={"Ingresa tu email"}
               >
                 Email
               </Input>
@@ -160,9 +197,7 @@ export const CheckoutForm = () => {
                 name="phone"
                 type="text"
                 id="telefono"
-                placeholder={
-                  isCustomer ? isCustomer.phone : "Ingresa tu telefono"
-                }
+                placeholder={"Ingresa tu telefono"}
               >
                 Telefono
               </Input>
@@ -173,9 +208,7 @@ export const CheckoutForm = () => {
                 name="country"
                 type="text"
                 id="pais"
-                placeholder={
-                  isCustomer ? isCustomer.adress.country : "Ingresa tu pais"
-                }
+                placeholder={"Ingresa tu pais"}
               >
                 Pais
               </Input>
@@ -184,11 +217,7 @@ export const CheckoutForm = () => {
                 name="state_province"
                 type="text"
                 id="state_province"
-                placeholder={
-                  isCustomer
-                    ? isCustomer.adress.state_province
-                    : "Ingresa tu estado/provincia"
-                }
+                placeholder={"Ingresa tu estado/provincia"}
               >
                 Estado/Provincia
               </Input>
@@ -197,9 +226,7 @@ export const CheckoutForm = () => {
                 name="city"
                 type="text"
                 id="ciudad"
-                placeholder={
-                  isCustomer ? isCustomer.adress.city : "Ingresa tu ciudad"
-                }
+                placeholder={"Ingresa tu ciudad"}
               >
                 Ciudad
               </Input>
@@ -208,9 +235,7 @@ export const CheckoutForm = () => {
                 name="adress"
                 type="text"
                 id="direccion"
-                placeholder={
-                  isCustomer ? isCustomer.adress.adress : "Ingresa tu direccion"
-                }
+                placeholder={"Ingresa tu direccion"}
               >
                 Direccion
               </Input>

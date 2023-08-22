@@ -58,13 +58,8 @@ export const CheckoutProducts = () => {
                       {size.quantity}
                     </ProductCounterQuantity>
                     <ProductCounterPlus
-                      onClick={async () => {
-                        const producto = await getProduct(items.id);
-                        const inventory = producto.data.inventoryItems.filter(
-                          (item) => item.size === size.talle
-                        );
-                        const stock = inventory.map((s) => s.stock);
-                        if (size.quantity < stock[0]) {
+                      onClick={() => {
+                        if (size.quantity < items.inventory[0].stock) {
                           dispatch(
                             cartActions.addQuantityToProduct(
                               items.id,
@@ -73,12 +68,8 @@ export const CheckoutProducts = () => {
                             )
                           );
                         }
-
-                        if (size.quantity === stock[0] - 1) {
-                          setDisabled(true);
-                        }
                       }}
-                      disabled={disabled}
+                      disabled={size.quantity === items.inventory[0].stock}
                     >
                       +
                     </ProductCounterPlus>

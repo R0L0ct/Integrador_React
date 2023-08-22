@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Oval } from "react-loader-spinner";
 
 export const Categories = () => {
-  const categorias = useSelector((state) => state.categories.categories);
+  // const categorias = useSelector((state) => state.categories.categories);
   const [categories, setCategories] = useState("");
   const [loading, setLoading] = useState(true);
 
