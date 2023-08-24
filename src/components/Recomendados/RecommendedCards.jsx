@@ -14,7 +14,10 @@ export const RecommendedCards = () => {
     const fetchProducts = async () => {
       try {
         const productsData = await getAllProducts();
-        setProducts(productsData.data);
+        const filterRecommended = productsData.data.filter(
+          (product) => product.recommended === true
+        );
+        setProducts(filterRecommended);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -38,11 +41,9 @@ export const RecommendedCards = () => {
           visible={true}
         />
       ) : (
-        products
-          .slice(1, 7)
-          .map((products) => (
-            <RecommendedCard key={products.id} {...products} />
-          ))
+        products.map((products) => (
+          <RecommendedCard key={products.id} {...products} />
+        ))
       )}
     </CardContainer>
   );

@@ -39,6 +39,7 @@ export const LinksContainerStyled = styled.div`
     justify-content: center;
     border-top: 1px solid gray;
     display: ${({ isHiddenMenu }) => (isHiddenMenu ? "none" : "flex")};
+    z-index: 9;
   }
 `;
 
@@ -46,9 +47,11 @@ export const CartAndMenuContainer = styled.div`
   font-size: 20px;
   display: flex;
   gap: 20px;
+  z-index: 9;
   @media (max-width: 366px) {
     width: 100%;
     justify-content: space-between;
+    align-items: center;
   }
 `;
 
@@ -132,9 +135,10 @@ export const RegisterStyled = styled.p`
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  display: ${({ isHiddenMenu }) => (!isHiddenMenu ? "none" : "flex")};
-  @media (max-width: 500px) {
-    display: none;
+  /* display: ${({ isHiddenMenu }) => (!isHiddenMenu ? "none" : "flex")}; */
+  display: flex;
+  @media (max-width: 230px) {
+    font-size: 12px;
   }
   color: white;
   :hover {
@@ -143,14 +147,27 @@ export const RegisterStyled = styled.p`
 `;
 
 export const LoggedStyled = styled.p`
-  display: ${({ isHiddenMenu }) => (!isHiddenMenu ? "none" : "flex")};
+  /* display: ${({ isHiddenMenu }) => (!isHiddenMenu ? "none" : "flex")}; */
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  @media (max-width: 500px) {
-    display: none;
+  @media (max-width: 230px) {
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+  }
+`;
+
+export const RegisterContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  @media (max-width: 230px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
   }
 `;

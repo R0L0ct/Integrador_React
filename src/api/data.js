@@ -59,6 +59,20 @@ const getProduct = async (id) => {
   }
 };
 
+const updateProduct = async (id, data, token) => {
+  try {
+    const response = await axiosInstance.patch(`${API}/product/${id}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getAllCategories = async () => {
   try {
     const response = await axiosInstance.get(`${API}/category`);
@@ -187,4 +201,5 @@ export {
   updateInventory,
   updateCustomer,
   getAllUsers,
+  updateProduct,
 };

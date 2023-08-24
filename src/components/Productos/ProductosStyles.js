@@ -12,6 +12,7 @@ export const ProductCardStyled = styled.div`
   height: 300px;
   width: 200px;
   gap: 10px;
+  position: relative;
   @media (max-width: 710px) {
     width: 170px;
   }
@@ -67,4 +68,10 @@ export const SizeButton = styled.div`
   :hover {
     color: red;
   }
+`;
+
+export const InputAdminContainer = styled.div`
+  position: absolute;
+  top: -20px;
+  right: 10px;
 `;

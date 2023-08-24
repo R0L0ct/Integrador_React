@@ -21,10 +21,13 @@ export const contactValidationSchema = Yup.object({
     .matches(regEmail, "Mail no valido")
     .required("Campo requerido"),
   message: Yup.string().required("Campo requerido"),
+  subject: Yup.string().required("Campo requerido"),
 });
 
 export const registerValidationSchema = Yup.object({
-  name: Yup.string().required("Campo requerido"),
+  name: Yup.string()
+    .required("Campo requerido")
+    .max(10, "Diez caracteres maximo"),
   email: Yup.string()
     .matches(regEmail, "Mail no valido")
     .required("Campo requerido"),

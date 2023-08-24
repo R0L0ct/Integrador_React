@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  InputAdminContainer,
   ProductCardImage,
   ProductCardInfo,
   ProductCardStyled,
@@ -11,7 +12,10 @@ import {
 import { Button } from "../UI/button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import * as cartActions from "../../redux/cart/cart.actions";
+import * as recommendedActions from "../../redux/recomendados/recomendados.actions";
 import { useState } from "react";
+import { updateProduct } from "../../api/data";
+import { Oval } from "react-loader-spinner";
 
 export const Producto = ({
   name,
@@ -20,6 +24,7 @@ export const Producto = ({
   price,
   id,
   inventoryItems,
+  recommended,
 }) => {
   const sizeState = useSelector((state) => state.cart.size);
   const selectedSizeState = useSelector((state) => state.cart.selectedSize);
@@ -30,16 +35,61 @@ export const Producto = ({
     size: null,
   });
 
-  const { role } = useSelector((state) => state.auth.token.token);
+  const tokenState = useSelector((state) => state.auth.token);
   const handleSizeButtonClick = (size) => {
     dispatch(cartActions.addProductSize(""));
     dispatch(cartActions.addProductSize(size));
     setSelectedProduct({ id, size });
   };
-  return role === "admin" ? (
+  const isCheckLoading = useSelector((state) => state.recommended.checkLoader);
+
+  const handleCheckboxChange = async () => {
+    if (!recommended) {
+      if (window.confirm("Agregar a recomendados?")) {
+        await updateProduct(id, { recommended: true }, tokenState.token.jwt);
+        dispatch(recommendedActions.setRecommended(true));
+        dispatch(
+          recommendedActions.setCheckLoader({ isLoading: true, id: id })
+        );
+      }
+      return;
+    } else {
+      if (window.confirm("Quitar de recomendados?")) {
+        await updateProduct(id, { recommended: false }, tokenState.token.jwt);
+        dispatch(recommendedActions.setRecommended(false));
+        dispatch(
+          recommendedActions.setCheckLoader({ isLoading: true, id: id })
+        );
+      }
+      return;
+    }
+  };
+
+  return tokenState.token?.role === "admin" ? (
     <ProductCardStyled>
+      <InputAdminContainer>
+        {isCheckLoading.isLoading && isCheckLoading.id === id ? (
+          <Oval
+            height={80}
+            width={25}
+            color="red"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="black"
+            strokeWidth={5}
+            strokeWidthSecondary={5}
+          />
+        ) : (
+          <input
+            type="checkbox"
+            checked={recommended}
+            onChange={handleCheckboxChange}
+          />
+        )}
+      </InputAdminContainer>
       <ProductCardInfo>
-        <input type="checkbox" />
         <ProductCardImage src={image} alt={name} />
         <ProductTitle>{name}</ProductTitle>
         <ProductDesc>Material: {description}</ProductDesc>

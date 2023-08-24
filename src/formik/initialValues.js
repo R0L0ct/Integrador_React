@@ -13,6 +13,7 @@ export const contactInitialValues = {
   name: "",
   email: "",
   message: "",
+  subject: "",
 };
 
 export const registerInitialValues = {

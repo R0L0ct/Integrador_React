@@ -12,6 +12,7 @@ import {
   MenuContainer,
   RegisterStyled,
   LoggedStyled,
+  RegisterContainer,
 } from "./NavbarStyles";
 import { FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -122,7 +123,9 @@ export const Navbar = () => {
             />
           </CartIconContainerStyled>
           {user ? (
-            <LoggedStyled isHiddenMenu={isHiddenMenu}>
+            <LoggedStyled
+            // isHiddenMenu={isHiddenMenu}
+            >
               {`Hi, ${user.name}`}
               <FaSignOutAlt
                 style={{ color: "red" }}
@@ -134,18 +137,22 @@ export const Navbar = () => {
               />
             </LoggedStyled>
           ) : (
-            <div style={{ display: "flex", gap: "10px" }}>
+            <RegisterContainer>
               <Link to="login">
-                <RegisterStyled isHiddenMenu={isHiddenMenu}>
+                <RegisterStyled
+                // isHiddenMenu={isHiddenMenu}
+                >
                   Login
                 </RegisterStyled>
               </Link>
               <Link to="register">
-                <RegisterStyled isHiddenMenu={isHiddenMenu}>
+                <RegisterStyled
+                // isHiddenMenu={isHiddenMenu}
+                >
                   Register
                 </RegisterStyled>
               </Link>
-            </div>
+            </RegisterContainer>
           )}
           {isMediumScreen && (
             <MenuContainer

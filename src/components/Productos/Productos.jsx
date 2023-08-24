@@ -1,11 +1,12 @@
 import React from "react";
 import { ProductCardContainer } from "./ProductosStyles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Producto } from "./Producto";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getAllProducts } from "../../api/data";
 import { ProgressBar } from "react-loader-spinner";
+import * as recommendedActions from "../../redux/recomendados/recomendados.actions";
 
 export const Productos = () => {
   // let products = useSelector((state) => state.products.products);
@@ -14,6 +15,10 @@ export const Productos = () => {
   );
   let [products, setProducts] = useState("");
   const [loading, setLoading] = useState(true);
+  const recommendedState = useSelector(
+    (state) => state.recommended.checkRecommended
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -21,14 +26,20 @@ export const Productos = () => {
         const productsData = await getAllProducts();
         setProducts(productsData.data);
         setLoading(false);
+        dispatch(
+          recommendedActions.setCheckLoader({ isLoading: false, id: "" })
+        );
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoading(false);
+        dispatch(
+          recommendedActions.setCheckLoader({ isLoading: false, id: "" })
+        );
       }
     };
-
+    console.log(recommendedState);
     fetchProducts();
-  }, []);
+  }, [recommendedState]);
 
   if (selectedCategory && !loading) {
     products = products.filter(
