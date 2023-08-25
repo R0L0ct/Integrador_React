@@ -11,6 +11,7 @@ import { InputContact } from "../../components/UI/inputContanct/InputContact";
 import { contactInitialValues } from "../../formik/initialValues";
 import { contactValidationSchema } from "../../formik/validationSchema";
 import { TextArea } from "../../components/UI/inputContanct/TextArea";
+import { sendEmail } from "../../api/data";
 
 export const Contactanos = () => {
   return (
@@ -21,6 +22,12 @@ export const Contactanos = () => {
           initialValues={contactInitialValues}
           validationSchema={contactValidationSchema}
           onSubmit={async (values, onSubmitProps) => {
+            await sendEmail({
+              from: values.email,
+              subject: values.subject,
+              text: values.name,
+              html: `<p>${values.message}</p>`,
+            });
             alert("Consulta enviada exitosamente!");
             console.log("Form data", values);
             onSubmitProps.resetForm();

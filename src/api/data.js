@@ -183,6 +183,15 @@ const refreshToken = async () => {
   }
 };
 
+const sendEmail = async (data) => {
+  try {
+    const res = await axiosInstance.post(`${API}/mail`, data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   register,
   login,
@@ -202,4 +211,5 @@ export {
   updateCustomer,
   getAllUsers,
   updateProduct,
+  sendEmail,
 };
