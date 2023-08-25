@@ -82,3 +82,25 @@ export const SubmitStyled = styled.button`
     font-size: 15px;
   }
 `;
+
+export const PRegisterStyled = styled.p`
+  color: white;
+  @media (max-width: 374px) {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+export const SpanRegisterStyled = styled.span`
+  cursor: pointer;
+  font-weight: 600;
+  @media (max-width: 374px) {
+    font-size: 12px;
+  }
+  :hover {
+    color: orange;
+  }
+`;

@@ -26,7 +26,9 @@ export const Contactanos = () => {
               from: values.email,
               subject: values.subject,
               text: values.name,
-              html: `<p>${values.message}</p>`,
+              html: `
+              <h3>Usuario: ${values.name} </h3>
+              <p>${values.message}</p>`,
             });
             alert("Consulta enviada exitosamente!");
             console.log("Form data", values);
@@ -56,7 +58,7 @@ export const Contactanos = () => {
               htmlFor="asunto"
               name="subject"
               id="asunto"
-              placeholder="Asunto..."
+              placeholder="asunto..."
               type="text"
             >
               Asunto

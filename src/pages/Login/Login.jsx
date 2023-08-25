@@ -10,6 +10,8 @@ import {
   FormikForm,
   LoginContainerStyled,
   LoginFormContainer,
+  PRegisterStyled,
+  SpanRegisterStyled,
   SubmitStyled,
 } from "./LoginStyles";
 import { login, refreshToken } from "../../api/data";
@@ -91,20 +93,16 @@ export const Login = () => {
               <SubmitStyled type="submit">Enviar</SubmitStyled>
             </div>
             <div>
-              <p style={{ color: "white" }}>
+              <PRegisterStyled>
                 No estas registrado?{" "}
-                <span
-                  style={{
-                    cursor: "pointer",
-                    fontWeight: "600",
-                  }}
+                <SpanRegisterStyled
                   onClick={() => {
                     navigate("/register");
                   }}
                 >
                   Registrarse
-                </span>
-              </p>
+                </SpanRegisterStyled>
+              </PRegisterStyled>
             </div>
           </FormikForm>
         </FormikContainer>

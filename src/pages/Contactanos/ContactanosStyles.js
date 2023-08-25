@@ -20,7 +20,7 @@ export const ContactanosContainerStyled = styled.div`
 
 export const ContactoBoxStyled = styled.div`
   width: 500px;
-  height: 500px;
+  height: 680px;
   background-image: url("images/hero.jpg");
   background-size: cover;
   border-radius: 20px;
