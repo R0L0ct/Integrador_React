@@ -1,6 +1,6 @@
 import axios from "axios";
 //  const API = "http://localhost:3001/api/v1";
-const API = "https://integrador-backend.onrender.com";
+const API = "https://integrador-backend.onrender.com/api/v1";
 
 const axiosInstance = axios.create({
   withCredentials: true,
