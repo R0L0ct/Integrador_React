@@ -33,14 +33,14 @@ const logout = async () => {
   }
 };
 
-const getUserBySessionToken = async () => {
-  try {
-    const response = await axiosInstance.get(`${API}/user/isauth`);
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const getUserBySessionToken = async () => {
+//   try {
+//     const response = await axiosInstance.get(`${API}/user/isauth`);
+//     return response;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const getAllProducts = async () => {
   try {
@@ -196,7 +196,7 @@ const sendEmail = async (data) => {
 export {
   register,
   login,
-  getUserBySessionToken,
+  // getUserBySessionToken,
   logout,
   getAllProducts,
   getAllCategories,
