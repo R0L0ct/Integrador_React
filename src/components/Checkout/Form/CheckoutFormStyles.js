@@ -26,6 +26,9 @@ export const FormikForm = styled(Form)`
 `;
 
 export const SubmitStyled = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   padding: 5px;
   border: none;

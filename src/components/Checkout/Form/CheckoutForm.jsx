@@ -24,6 +24,7 @@ import {
   updateCustomer,
   // updateInventory,
 } from "../../../api/data";
+import { Oval } from "react-loader-spinner";
 
 export const CheckoutForm = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -32,6 +33,7 @@ export const CheckoutForm = () => {
   const { shippingCost } = useSelector((state) => state.cart);
   const tokenState = useSelector((state) => state.auth.token);
   const [isLoading, setLoading] = useState(true);
+  const [isConfirmLoading, setConfirmLoading] = useState(false);
 
   const [isCustomer, setCustomer] = useState("");
   useEffect(() => {
@@ -83,12 +85,13 @@ export const CheckoutForm = () => {
         validationSchema={checkoutValidationSchema}
         enableReinitialize
         onSubmit={async (values) => {
+          setConfirmLoading(true);
           const customer = await getAllCustomers();
           const customerUserId = customer.data.filter(
             (user) => user.userId === tokenState.user.id
           );
 
-          if (!customerUserId) {
+          if (customerUserId.length === 0) {
             await createCustomer({
               name: values.name,
               lastname: values.lastname,
@@ -102,9 +105,7 @@ export const CheckoutForm = () => {
               },
               userId: tokenState.user.id,
             });
-          }
-
-          if (customerUserId) {
+          } else {
             await updateCustomer(customerUserId[0].id, {
               name: values.name,
               lastname: values.lastname,
@@ -157,6 +158,7 @@ export const CheckoutForm = () => {
             });
 
             // console.log(cartItems);
+            setConfirmLoading(false);
             navigate("/completed");
             dispatch(cartActions.removeAllProducts());
           }
@@ -243,7 +245,22 @@ export const CheckoutForm = () => {
           </ContainerStyled>
           <div>
             <SubmitStyled disabled={!cartItems.length} type="submit">
-              Confirmar Compra
+              {isConfirmLoading ? (
+                <Oval
+                  height={25}
+                  width={80}
+                  color="#4fa94d"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                  ariaLabel="oval-loading"
+                  secondaryColor="#4fa94d"
+                  strokeWidth={5}
+                  strokeWidthSecondary={5}
+                />
+              ) : (
+                "Confirmar Compra"
+              )}
             </SubmitStyled>
           </div>
         </FormikForm>

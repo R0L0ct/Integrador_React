@@ -7,7 +7,7 @@ import { getAllProducts } from "../../api/data";
 import { Audio } from "react-loader-spinner";
 
 export const RecommendedCards = () => {
-  let [products, setProducts] = useState("");
+  let [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
